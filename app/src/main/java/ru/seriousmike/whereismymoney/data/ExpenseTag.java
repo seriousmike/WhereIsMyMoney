@@ -5,12 +5,21 @@ import java.util.List;
 /**
  * Created by SeriousM on 21.04.2015.
  */
-public class ExpenseTags {
+public class ExpenseTag {
 
 	private long id;
 	private String name;
-
 	private List<ExpenseType> types;
+
+	public ExpenseTag(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public ExpenseTag(String name) {
+		this.name = name;
+	}
+
 
 	public long getId() {
 		return id;

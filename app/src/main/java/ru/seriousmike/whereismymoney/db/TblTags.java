@@ -1,6 +1,10 @@
 package ru.seriousmike.whereismymoney.db;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import ru.seriousmike.whereismymoney.data.ExpenseTag;
 
 /**
  * Created by SeriousM on 21.04.2015.
@@ -29,5 +33,32 @@ public class TblTags {
 		cv.put(FLD_NAME, name);
 		return cv;
 	}
+
+
+	public static Cursor getCursor(SQLiteDatabase db, Long id, String name) {
+		String selection = "";
+		String[] args = null;
+		if(id!=null) {
+			selection += FLD_ID+" = "+id+" ";
+		}
+		if(name != null) {
+			selection += FLD_NAME + " = ?";
+			args = new String[] {name};
+		}
+
+		if(id==null && name == null) {
+			selection = null;
+		}
+		return db.query(TABLE_NAME, null, selection, args, null, null, FLD_NAME);
+	}
+
+	public static ExpenseTag createTagFromCursor(Cursor c) {
+		return new ExpenseTag(
+				c.getLong( c.getColumnIndex( FLD_ID ) ),
+				c.getString( c.getColumnIndex( FLD_NAME ) )
+		);
+	}
+
+
 
 }

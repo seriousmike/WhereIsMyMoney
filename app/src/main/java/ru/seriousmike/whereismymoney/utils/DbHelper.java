@@ -1,11 +1,15 @@
 package ru.seriousmike.whereismymoney.utils;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import ru.seriousmike.whereismymoney.data.ExpenseTag;
+import ru.seriousmike.whereismymoney.data.ExpenseType;
 import ru.seriousmike.whereismymoney.db.TblExpenseTypes;
 import ru.seriousmike.whereismymoney.db.TblExpenses;
+import ru.seriousmike.whereismymoney.db.TblLinkTagTypes;
 import ru.seriousmike.whereismymoney.db.TblTags;
 
 /**
@@ -42,5 +46,43 @@ public class DbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+	}
+
+	// --- ТИПЫ ТРАТ ---------------------------------------------------------
+	public long insertExpType(String typeName) {
+		return getWritableDatabase().insert(TblExpenseTypes.TABLE_NAME, null, TblExpenseTypes.getCV(typeName));
+	}
+
+	public ExpenseType getExpTypeByName(String typeName) {
+		Cursor c = TblExpenseTypes.getCursor(getReadableDatabase(), null, typeName);
+		if(c.getCount()>0) {
+			c.moveToFirst();
+			return TblExpenseTypes.createTypeFromCursor(c);
+		}
+		return null;
+	}
+
+
+	// --- ТЭГИ ТРАТ -------------------------------------------------------
+	public long insertExpTag(String tagName) {
+		return getWritableDatabase().insert(TblTags.TABLE_NAME, null, TblTags.getCV(tagName));
+	}
+
+	public ExpenseTag getExpTagByName(String tagName) {
+		Cursor c = TblTags.getCursor(getReadableDatabase(), null, tagName);
+		if(c.getCount()>0) {
+			c.moveToFirst();
+			return TblTags.createTagFromCursor(c);
+		}
+		return null;
+	}
+
+
+	// -- связи
+	public long linkTypeTag(long typeId, long tagId) {
+		if(TblLinkTagTypes.getCount(getReadableDatabase(), typeId, tagId)==0) {
+			return getWritableDatabase().insert(TblLinkTagTypes.TABLE_NAME, null, TblLinkTagTypes.getCV(typeId, tagId));
+		}
+		return -1;
 	}
 }

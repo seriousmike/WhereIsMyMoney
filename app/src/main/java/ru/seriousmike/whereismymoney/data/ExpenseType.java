@@ -9,7 +9,16 @@ public class ExpenseType {
 
 	private long id;
 	private String name;
-	private List<ExpenseTags> tags;
+	private List<ExpenseTag> tags;
+
+	public ExpenseType(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public ExpenseType(String name) {
+		this.name = name;
+	}
 
 	public long getId() {
 		return id;
@@ -27,11 +36,11 @@ public class ExpenseType {
 		this.name = name;
 	}
 
-	public List<ExpenseTags> getTags() {
+	public List<ExpenseTag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<ExpenseTags> tags) {
+	public void setTags(List<ExpenseTag> tags) {
 		this.tags = tags;
 	}
 }

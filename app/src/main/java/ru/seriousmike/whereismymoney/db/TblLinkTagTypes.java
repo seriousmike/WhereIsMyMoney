@@ -42,6 +42,21 @@ public class TblLinkTagTypes {
 		return cv;
 	}
 
+	public static int getCount(SQLiteDatabase db, Long typeId, Long tagId) {
+		String selection = null;
+		if(typeId != null || tagId != null) {
+			selection = "";
+			if(typeId!=null) {
+				selection += FLD_TYPE_ID+"="+typeId;
+			}
+			if(tagId!=null) {
+				selection += " "+FLD_TAG_ID+"="+tagId;
+			}
+		}
+		Cursor c = db.query(TABLE_NAME, new String[] {"COUNT(*)"}, selection, null, null, null, null);
+		return c.getInt(0);
+	}
+
 	public static List<Long> getTypeIdsByTagId(SQLiteDatabase db, long tagId) {
 		List<Long> ids = new ArrayList<>();
 		Cursor c = db.query(TABLE_NAME, new String[]{FLD_TYPE_ID}, FLD_TAG_ID+" = ?", new String[]{tagId+""}, null, null, null);
